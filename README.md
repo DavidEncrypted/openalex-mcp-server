@@ -2,6 +2,14 @@
 
 This project provides a Model Context Protocol (MCP) server that allows AI agents and other MCP clients to interact with the [OpenAlex](https://openalex.org/) database, specifically focusing on scholarly works. It utilizes the [pyalex](https://github.com/J535D165/pyalex) Python library to communicate with the OpenAlex API and the [MCP Python SDK](https://github.com/modelcontextprotocol/python-sdk) (`fastmcp`) to expose functionality as MCP tools.
 
+## Examples
+As inspiration, here are some example queries that you can ask a AI agent that has this mcp enabled:
+
+- Find the 5 most cited papers that cite the foundational paper introducing the convolutional neural netork
+- I am looking for papers related to Self-Supervised visual odometry. Find papers related to this topic, then score the relevance of each paper by reading the title+abstract and then giving them a relevance score of 1-10.
+- Find the most influential papers on transformer models published since 2020 and summarize how the architecture has evolved
+- Find papers co-authored by researchers at MIT and Stanford
+
 ## Features
 
 This server exposes the following MCP tools for interacting with OpenAlex works:
@@ -46,11 +54,11 @@ This server exposes the following MCP tools for interacting with OpenAlex works:
         *   `work_id` (string, required): OpenAlex ID of the work.
     *   **Returns:** Object representing the N-grams, or an error object (e.g., if N-grams are not found).
 
+## Note
+**OpenAlex generally does not store Full Text due to copywrite reasons.**
+This also means that the openalex search functionality does not search over the full text, but only the title + abstract
+
 ## Setup and Installation
-
-### Prerequisites
-
-*   Python 3.9+
 
 ### Installation
 
@@ -60,19 +68,19 @@ This server exposes the following MCP tools for interacting with OpenAlex works:
     cd openalex-mcp-server
     ```
 2.  **Install dependencies:**
-    It's recommended to use a virtual environment.
-    ```bash
-    # Using pip
-    python -m venv .venv
-    source .venv/bin/activate # On Windows use `.venv\Scripts\activate`
-    pip install .
 
-    # Or using uv
+    ```bash
     uv venv
     source .venv/bin/activate
+
     uv pip install .
     ```
     This installs the server package along with its dependencies (`mcp[cli]`, `pyalex`).
+
+3. **Run server:**
+    ```bash
+    uv --directory /YOUR/INSTALL/DIRECTORY/openalex-mcp-server run server.py
+    ```
 
 ### Configuration
 
@@ -96,7 +104,7 @@ To use this server with an MCP client (like the Claude VS Code Extension or Clau
       "autoApprove": [],
       "disabled": false,
       "timeout": 60,
-      "command": "openalex-mcp-server", // Uses the installed script
+      "command": "uv --directory /YOUR/INSTALL/DIRECTORY/openalex-mcp-server run server.py",
       "args": [],
       "env": {
         "OPENALEX_EMAIL": "your.email@example.com" // Set your email here!
@@ -164,22 +172,11 @@ Once the server is configured and running (either via the MCP client integration
 To run the server locally for development and testing:
 
 1.  Ensure dependencies are installed (see Installation).
-2.  Set the `OPENALEX_EMAIL` environment variable if desired.
-3.  Run the server script directly:
-    ```bash
-    source .venv/bin/activate # Activate your environment
-    export OPENALEX_EMAIL="your.email@example.com" # Optional
-    python src/openalex_mcp_server/server.py
-    ```
-    The server will start and listen on standard input/output for MCP messages.
-
-    *(Note: Running with `mcp dev src/openalex_mcp_server/server.py` encountered issues during development, potentially related to script execution or initialization conflicts. Running directly with `python` was more reliable.)*
+2.  Set the `OPENALEX_EMAIL` environment variable.
+3.  `mcp dev server.py`
 
 ## Dependencies
 
 *   [mcp-sdk](https://github.com/modelcontextprotocol/python-sdk): For MCP server implementation.
 *   [pyalex](https://github.com/J535D165/pyalex): For interacting with the OpenAlex API.
 
-## License
-
-This project is licensed under the MIT License. See the `LICENSE` file for details (if one exists).

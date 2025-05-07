@@ -19,12 +19,6 @@ logger = logging.getLogger(__name__)
 OPENALEX_EMAIL = os.getenv("OPENALEX_EMAIL")
 if OPENALEX_EMAIL:
     pyalex.config.email = OPENALEX_EMAIL
-    # logger.info(f"Using OpenAlex polite pool with email: {OPENALEX_EMAIL}") # Temporarily commented out
-# else:
-    # logger.warning(
-    #     "OPENALEX_EMAIL environment variable not set. "
-    #     "Using OpenAlex anonymous pool (slower, lower rate limits)."
-    # ) # Temporarily commented out
 
 # Configure retries for robustness
 pyalex.config.max_retries = 3
@@ -36,10 +30,12 @@ mcp = FastMCP(
     "OpenAlex Works Explorer",
     version="0.1.0",
     description="Provides tools to search and retrieve data about scholarly works from OpenAlex.",
+    dependencies=[
+        'pyalex'
+    ],
 )
 
 # --- Helper Functions ---
-
 def _select_fields(item: Dict[str, Any], fields: List[str]) -> Dict[str, Any]:
     """Selects specific root-level fields from a dictionary."""
     # Ensure essential ID fields are always present if specific fields are requested
@@ -237,10 +233,7 @@ async def search_works(
 
         # Execute paginated query
         # pyalex paginate returns an iterator of pages
-        # if cursor:
         pager = query.paginate(per_page=per_page, cursor=cursor, n_max=per_page) # n_max=per_page gets just one page
-        # else:
-        #     pager = query.paginate(per_page=per_page, cursor="*", n_max=per_page) # n_max=per_page gets just one page
 
         page_results = []
         metadata = {}
@@ -274,8 +267,6 @@ async def search_works(
         # pyalex did it during the query. If not, we need the full dict processed.
         processed_page_results = _process_results(page_results, None)
 
-        # REMOVED: Explicit abstract trigger loop here, logic moved into _process_results
-
         # Apply summarization if requested
         if summarize_results:
             # Pass select_fields to the summarizer to filter the summary
@@ -299,9 +290,10 @@ async def search_works(
         logger.exception(f"Error in search_works: {e}")
         # Return error information in a structured way if possible
         return {"error": str(e), "results": [], "meta": {}}
+
 @mcp.tool()
 async def get_work_details(
-    ctx: Context, # Changed ToolContext to Context
+    ctx: Context,
     work_id: str,
     select_fields: Optional[List[str]] = None,
 ) -> Dict[str, Any]:
@@ -543,7 +535,8 @@ async def get_referenced_works(
         if work_id.startswith("https://openalex.org/"):
             work_id = work_id.split("/")[-1]
 
-        work_data = Works()[work_id]
+        # Only select the referenced_works field to reduce token usage
+        work_data = Works().select(["referenced_works"])[work_id]
         referenced_ids = work_data.get("referenced_works", [])
         return {"referenced_work_ids": referenced_ids}
 

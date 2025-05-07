@@ -1,10 +1,13 @@
 [project]
 name = "openalex-mcp-server"
 version = "0.1.0"
-description = "Add your description here"
+description = "Provides tools to search and retrieve data about scholarly works from OpenAlex."
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
     "mcp[cli]>=1.6.0",
     "pyalex>=0.18",
 ]
+
+[project.scripts]
+openalex_mcp_server = "server:main"
