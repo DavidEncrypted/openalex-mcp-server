@@ -3,7 +3,7 @@
 This project provides a Model Context Protocol (MCP) server that allows AI agents and other MCP clients to interact with the [OpenAlex](https://openalex.org/) database, specifically focusing on scholarly works. It utilizes the [pyalex](https://github.com/J535D165/pyalex) Python library to communicate with the OpenAlex API and the [MCP Python SDK](https://github.com/modelcontextprotocol/python-sdk) (`fastmcp`) to expose functionality as MCP tools.
 
 ## Examples
-As inspiration, here are some example queries that you can ask an AI agent that has this mcp enabled:
+For inspiration, here are some example queries that you can ask an AI agent that has this mcp enabled:
 
 - Find the 5 most cited papers that cite the foundational paper introducing the convolutional neural netork
 - I am looking for papers related to Self-Supervised visual odometry. Find papers related to this topic, then score the relevance of each paper by reading the title+abstract and then giving them a relevance score of 1-10.
