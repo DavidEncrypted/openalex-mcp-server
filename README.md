@@ -5,7 +5,7 @@ This project provides a Model Context Protocol (MCP) server that allows AI agent
 ## Examples
 For inspiration, here are some example queries that you can ask an AI agent that has this mcp enabled:
 
-- Find the 5 most cited papers that cite the foundational paper introducing the convolutional neural netork
+- Find the 5 most cited papers that cite the foundational paper introducing the convolutional neural network
 - I am looking for papers related to Self-Supervised visual odometry. Find papers related to this topic, then score the relevance of each paper by reading the title+abstract and then giving them a relevance score of 1-10.
 - Find the most influential papers on transformer models published since 2020 and summarize how the architecture has evolved
 - Find papers co-authored by researchers at MIT and Stanford
