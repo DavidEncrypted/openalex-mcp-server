@@ -10,6 +10,8 @@ As inspiration, here are some example queries that you can ask an AI agent that 
 - Find the most influential papers on transformer models published since 2020 and summarize how the architecture has evolved
 - Find papers co-authored by researchers at MIT and Stanford
 
+My favorite AI agent for this is cline: https://github.com/cline/cline
+
 ## Features
 
 This server exposes the following MCP tools for interacting with OpenAlex works:
@@ -104,8 +106,10 @@ To use this server with an MCP client (like the Claude VS Code Extension or Clau
       "autoApprove": [],
       "disabled": false,
       "timeout": 60,
-      "command": "uv --directory /YOUR/INSTALL/DIRECTORY/openalex-mcp-server run server.py",
-      "args": [],
+      "command": "uv",
+      "args": [
+        "--directory", "/YOUR/INSTALL/DIRECTORY/openalex-mcp-server", "run", "server.py"
+      ],
       "env": {
         "OPENALEX_EMAIL": "your.email@example.com" // Set your email here!
       },
@@ -116,7 +120,6 @@ To use this server with an MCP client (like the Claude VS Code Extension or Clau
 ```
 
 *   Replace `"your.email@example.com"` with your actual email address.
-*   Ensure the `command` (`openalex-mcp-server`) is accessible in your system's PATH, which should be the case if installed correctly via pip/uv in an active environment.
 *   Restart your MCP client (e.g., reload the VS Code window) after adding the configuration.
 
 ## Usage
