@@ -10,8 +10,6 @@ For inspiration, here are some example queries that you can ask an AI agent that
 - Find the most influential papers on transformer models published since 2020 and summarize how the architecture has evolved
 - Find papers co-authored by researchers at MIT and Stanford
 
-My favorite AI agent for this is cline: https://github.com/cline/cline
-
 ## Features
 
 This server exposes the following MCP tools for interacting with OpenAlex works:
